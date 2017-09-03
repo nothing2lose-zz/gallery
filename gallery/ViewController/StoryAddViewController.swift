@@ -11,6 +11,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import MBProgressHUD
 
 class StoryAddViewController: UIViewController {
     
@@ -30,9 +31,11 @@ class StoryAddViewController: UIViewController {
         setup()
         
         detailView.images = images
-            
-    }
-    
+        if let images = images, images.count > 0 {
+            detailView.selectedThumbnailIndex = 0
+        }
+        
+    }    
     
     
     // MARK: - private
@@ -41,7 +44,12 @@ class StoryAddViewController: UIViewController {
         let title = dv.titleTextField.text
         let content = dv.descriptionTextView.text
         let selectedThumbnailIndex = dv.selectedThumbnailIndex
+        
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+        navigationController?.view.isUserInteractionEnabled = false
         Storage.createStory(title, content, images ?? [], selectedThumbnailIndex) {
+            self.navigationController?.view.isUserInteractionEnabled = true
+            MBProgressHUD.hide(for: self.view, animated: true)
             self.navigationController?.popViewController(animated: true)
         }
     }

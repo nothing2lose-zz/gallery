@@ -35,20 +35,26 @@ final class CaptureSessionManager {
     private(set) var imageDatas: [Data] = []
     private(set) var images: [UIImage] = []
     private var snapshotRequestCount: Int = 0
+    private var accessAllowed = false
     
     weak var delegate: CaptureSessionManagerDelegate?
     
-    
+    static func requestAccess() {
+        AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { (completion) in
+        }
+    }
     
     init() {
         session = AVCaptureSession()
-        session.sessionPreset = AVCaptureSessionPresetPhoto
+//        session.sessionPreset = AVCaptureSessionPresetPhoto
+        session.sessionPreset = AVCaptureSessionPresetMedium
         
         
         let backCamera = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
         var error: NSError?
         do {
             input = try AVCaptureDeviceInput(device: backCamera)
+            device = backCamera
         } catch let error1 as NSError {
             error = error1
             input = nil
@@ -80,12 +86,12 @@ final class CaptureSessionManager {
         let status = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
         
         if status == AVAuthorizationStatus.authorized {
-            
+            accessAllowed = true
             session?.startRunning()
             
         } else if status == AVAuthorizationStatus.denied ||
             status == AVAuthorizationStatus.restricted {
-            
+            accessAllowed = false
             session?.stopRunning()
         }
 
@@ -94,6 +100,7 @@ final class CaptureSessionManager {
     
     // TODO: replace deprecated methods.
     func takeSnapshot() {
+        guard accessAllowed else { return }
         
         snapshotRequestCount += 1
         

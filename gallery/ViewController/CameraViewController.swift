@@ -52,17 +52,16 @@ final class CameraViewController: UIViewController {
             make.edges.equalTo(view)
         }
         confirmButton.snp.makeConstraints { (make) in
-            make.top.equalTo(view).offset(20)
-            make.leading.equalTo(view).offset(20)
-            make.width.equalTo(50)
-            make.height.equalTo(confirmButton.snp.width)
+            make.bottom.equalTo(view).offset(-20)
+            make.trailing.equalTo(view).offset(-20)
+            make.width.equalTo(80)
+            make.height.equalTo(50)
         }
         closeButton.snp.makeConstraints { (make) in
-            make.top.equalTo(view).offset(20)
-            make.trailing.equalTo(view).offset(-20)
-            make.width.equalTo(50)
-            make.height.equalTo(closeButton.snp.width)
-            
+            make.bottom.equalTo(view).offset(-20)
+            make.leading.equalTo(view).offset(20)
+            make.width.equalTo(80)
+            make.height.equalTo(50)
         }
         
         // event binding

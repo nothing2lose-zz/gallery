@@ -57,22 +57,22 @@ final class CameraView: UIView {
         addSubview(cameraFlashButton)
         
         cameraShutterButton.snp.makeConstraints { (make) in
-            make.bottom.equalTo(self.snp.bottom)
-            make.leading.equalTo(20)
-            make.height.equalTo(50)
+            make.bottom.equalTo(self)
+            make.centerX.equalTo(self)
+            make.height.equalTo(90)
+            make.width.equalTo(90)
         }
         cameraToggleButton.snp.makeConstraints { (make) in
-            make.bottom.equalTo(self.snp.bottom)
-            make.leading.equalTo(cameraShutterButton.snp.trailing)
-            make.width.equalTo(cameraShutterButton.snp.width)
-            make.height.equalTo(cameraShutterButton.snp.height)
+            make.top.equalTo(self).offset(20)
+            make.trailing.equalTo(self).offset(-20)
+            make.width.equalTo(80)
+            make.height.equalTo(50)
         }
         cameraFlashButton.snp.makeConstraints { (make) in
-            make.bottom.equalTo(self.snp.bottom)
-            make.leading.equalTo(cameraToggleButton.snp.trailing)
-            make.width.equalTo(cameraShutterButton.snp.width)
-            make.height.equalTo(cameraToggleButton.snp.height)
-            make.trailing.equalTo(self).offset(-20)
+            make.top.equalTo(self).offset(20)
+            make.leading.equalTo(self).offset(20)
+            make.width.equalTo(80)
+            make.height.equalTo(50)
         }
         
         
@@ -97,7 +97,7 @@ final class CameraView: UIView {
                 guard let `self` = self else { return Observable<Int64>.empty() }
                 if e.state == .began {
                     // TODO: Enhance - snapshot has a performance issue.
-                    return Observable<Int64>.interval(0.3, scheduler: MainScheduler.instance)
+                    return Observable<Int64>.interval(0.20, scheduler: MainScheduler.instance)
                         .takeUntil(self.cameraShutterButton.rx.controlEvent(.touchUpInside))
                 } else {
                     return Observable<Int64>.empty()

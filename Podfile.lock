@@ -26,6 +26,7 @@ PODS:
     - AFNetworking (~> 2.5)
     - EGOCache (~> 2.1)
     - UAProgressView (~> 0.1)
+  - MBProgressHUD (1.0.0)
   - RxCocoa (3.6.1):
     - RxSwift (~> 3.6)
   - RxSwift (3.6.1)
@@ -39,6 +40,7 @@ PODS:
 DEPENDENCIES:
   - CoreStore (~> 4.1)
   - FSImageViewer (~> 3.4)
+  - MBProgressHUD (~> 1.0.0)
   - RxCocoa (~> 3.0)
   - RxSwift (~> 3.0)
   - SDWebImage (~> 4.0)
@@ -50,6 +52,7 @@ SPEC CHECKSUMS:
   CoreStore: 9273ec1075d62802de39d6eba06dad8cbf6eed1c
   EGOCache: f0295dbe041156acabd39021354ad1045ee49e72
   FSImageViewer: 0dea92069cce74a800b75cb8777c923f2be59124
+  MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   RxCocoa: 84a08739ab186248c7f31ce4ee92d6f8a947d690
   RxSwift: f9de85ea20cd2f7716ee5409fc13523dc638e4e4
   SDWebImage: 0e435c14e402a6730315a0fb79f95e68654d55a4
@@ -57,6 +60,6 @@ SPEC CHECKSUMS:
   UAProgressView: ce49aee47c14df6dc372f6fd57852f570ca97e6b
   UITextView+Placeholder: 77680995fcdd07c3f52ec92fe1150874a2ac89ff
 
-PODFILE CHECKSUM: afc88bf34d5bfe9911a404761b18f24039f01b89
+PODFILE CHECKSUM: 0d75b95302c9f207ff9b1944ad25017b47762427
 
 COCOAPODS: 1.2.1.beta.1

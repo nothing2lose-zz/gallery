@@ -18,7 +18,7 @@ public struct Storage {
         let absolutePath = path.appendingPathComponent("gallery")
         let store = SDImageCache(namespace: "thumbnails", diskCacheDirectory: absolutePath.relativePath)
         store.config.shouldCacheImagesInMemory = false
-        store.config.maxCacheAge = 0 // persistent
+        store.config.maxCacheAge = Int.max // persistent
         return store
     }()
     static let originalImageStorage: SDImageCache = {
@@ -26,7 +26,7 @@ public struct Storage {
         let absolutePath = path.appendingPathComponent("gallery")
         let store = SDImageCache(namespace: "originalImages", diskCacheDirectory: absolutePath.relativePath)
         store.config.shouldCacheImagesInMemory = false
-        store.config.maxCacheAge = 0 // persistent
+        store.config.maxCacheAge = Int.max // persistent
         return store
     }()
     

@@ -12,6 +12,7 @@ target 'gallery' do
 
   pod 'SDWebImage', '~> 4.0'
   pod 'FSImageViewer', '~> 3.4'
+  pod 'MBProgressHUD', '~> 1.0.0' 
  
   pod 'UITextView+Placeholder', '~> 1.2'
   # Pods for gallery

@@ -17,7 +17,7 @@ final class StoryListViewController: UIViewController, CameraViewControllerDeleg
     
     fileprivate lazy var textfield: UITextField = {
         let tf = UITextField()
-        tf.placeholder = "검색어를 입력해주세요. 0.3초뒤 자동검색 됩니다."
+        tf.placeholder = "검색어를 입력해주세요."
         let close = KeyboardResignAccessoryView()
         close.textfield = tf
         return tf
@@ -40,6 +40,8 @@ final class StoryListViewController: UIViewController, CameraViewControllerDeleg
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        CaptureSessionManager.requestAccess()
         
         // initialise CoreData
         Storage.initialize()
