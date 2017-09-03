@@ -79,6 +79,7 @@ final class CameraView: UIView {
         // camera session binding
         sessionManager = CaptureSessionManager()
         if let preview = sessionManager.videoPreviewLayer {
+            preview.zPosition = -1
             preview.frame = bounds
             layer.addSublayer(preview)
         }

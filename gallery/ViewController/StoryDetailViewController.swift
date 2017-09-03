@@ -97,6 +97,7 @@ final class StoryDetailViewController: UIViewController {
             .addDisposableTo(disposeBag)
         
         let longTapGesture = UILongPressGestureRecognizer()
+        detailView.collectionView.addGestureRecognizer(longTapGesture)
         longTapGesture.rx.event
             .bind { e in
                 if e.state == UIGestureRecognizerState.began {
@@ -105,7 +106,7 @@ final class StoryDetailViewController: UIViewController {
             }
             .addDisposableTo(disposeBag)
         
-        detailView.collectionView.addGestureRecognizer(longTapGesture)
+        
         
         // style
         title = "Detail"

@@ -53,7 +53,7 @@ public struct Storage {
                 fileName: "Story.sqlite",
                 localStorageOptions: .recreateStoreOnModelMismatch
             )
-        )
+        )        
     }
 
     static let stack: DataStack = {
@@ -120,6 +120,37 @@ public struct Storage {
             
         }) { _ in
             completionHandler?()
+        }
+    }
+    
+    static func deleteStory(_ story: Story, _ completionHandler: (() -> Void)?) {
+        
+        func deleteFromDB() {
+            stack.perform(asynchronous: { (transaction) -> Void in                
+                transaction.delete(story)
+            }) { _ in
+                completionHandler?()
+            }
+        }
+        
+        var imageCount = story.images.count
+
+        // remove image from disk
+        if imageCount > 0 {
+            
+            let fileIds = story.images.value.map { $0.fileId.value }
+            fileIds.forEach {
+                deleteImageFile($0, {
+                    imageCount -= 1
+                    
+                    if imageCount == 0 {
+                        deleteFromDB()
+                    }
+                })
+            }
+            
+        } else {
+            deleteFromDB()
         }
     }
     
@@ -202,21 +233,40 @@ public struct Storage {
     // image cache util
     
     // TODO: refactor & delete method should be implemented.
+    private static func deleteImageFile(_ fileId: String, _ completionHandler: @escaping (() -> Void)) {
+        DispatchQueue.global(qos: .background).async {
+            var counter = 0
+            func completed() {
+                if (counter == 2) {
+                    completionHandler()
+                }
+            }
+            self.thumbnailImageStorage.removeImage(forKey: fileId, fromDisk: true, withCompletion: {
+                counter += 1
+                completed()
+            })
+            self.originalImageStorage.removeImage(forKey: fileId, fromDisk: true, withCompletion: {
+                counter += 1
+                completed()
+            })
+        }
+    }
+    
     private static func saveImageFile(_ fileId: String, _ image: UIImage, _ completionHandler: @escaping (() -> Void)) {
         DispatchQueue.global(qos: .background).async {
-            var savedCount = 0
+            var counter = 0
             func completed() {
-                if (savedCount == 2) {
+                if (counter == 2) {
                     completionHandler()
                 }
             }
             self.thumbnailImageStorage.store(image, imageData: UIImageJPEGRepresentation(image, 0.3), forKey: fileId, toDisk: true, completion: {
-                savedCount += 1
+                counter += 1
                 completed()
             })
             
             self.originalImageStorage.store(image, imageData: nil, forKey: fileId, toDisk: true, completion: {
-                savedCount += 1
+                counter += 1
                 completed()
             })
         }

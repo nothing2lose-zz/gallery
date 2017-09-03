@@ -25,6 +25,8 @@ final class StoryListViewController: UIViewController, CameraViewControllerDeleg
     fileprivate lazy var tableView: UITableView = {
         let tb = UITableView(frame: .zero, style: .plain)
         tb.register(StoryCell.self, forCellReuseIdentifier: StoryCell.identifier)
+        tb.allowsMultipleSelectionDuringEditing = false
+        tb.allowsMultipleSelection = false
         tb.dataSource = self
         tb.delegate = self
         return tb
@@ -210,6 +212,16 @@ extension StoryListViewController: ListSectionObserver {
 extension StoryListViewController: UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate {
     
     // MARK: datasource
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            Storage.deleteStory(Storage.stories[indexPath], nil)
+        }
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return Storage.stories.numberOfSections()
     }

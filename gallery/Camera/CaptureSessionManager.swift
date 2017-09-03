@@ -47,7 +47,7 @@ final class CaptureSessionManager {
     init() {
         session = AVCaptureSession()
 //        session.sessionPreset = AVCaptureSessionPresetPhoto
-        session.sessionPreset = AVCaptureSessionPresetMedium
+        session.sessionPreset = AVCaptureSessionPresetHigh
         
         
         let backCamera = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)

@@ -29,7 +29,7 @@ final class Story: CoreStoreObject {
     )
     
     let thumbnailImageIndex = Value.Optional<Int>("thumbnailImageIndex", initial: nil)
-    let images = Relationship.ToManyOrdered<Image>("images", inverse: { $0.master })
+    let images = Relationship.ToManyOrdered<Image>("images", inverse: { $0.master }, deleteRule: .cascade)
     
     
     private static func getModifiedAtMonth(_ partialObject: PartialObject<Story>) -> String? {

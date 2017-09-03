@@ -34,6 +34,8 @@ class StoryAddViewController: UIViewController {
         if let images = images, images.count > 0 {
             detailView.selectedThumbnailIndex = 0
         }
+        let imageCount: Int = images?.count ?? 0
+        detailView.photoCountLabel.text = "\(imageCount)개의 사진"
         
     }    
     
@@ -75,6 +77,7 @@ class StoryAddViewController: UIViewController {
             .addDisposableTo(disposeBag)
         
         let longTapGesture = UILongPressGestureRecognizer()
+        detailView.collectionView.addGestureRecognizer(longTapGesture)
         longTapGesture.rx.event
             .bind { e in
                 if e.state == UIGestureRecognizerState.began {
