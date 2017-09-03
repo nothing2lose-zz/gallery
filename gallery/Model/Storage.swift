@@ -153,9 +153,8 @@ public struct Storage {
                     if let content = content {
                         story.descriptionText .= content
                     }
-                    if let modifiedAt = modifiedAt {
-                        story.modifiedAt .= modifiedAt
-                    }
+                    story.modifiedAt .= Date()
+                    story.createdAt .= Date()
                     story.thumbnailImageIndex .= thumbnailIndex
                     story.images .= imageModels
                     
