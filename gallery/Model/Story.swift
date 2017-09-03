@@ -46,12 +46,3 @@ final class Story: CoreStoreObject {
     }
     
 }
-
-// Helper
-extension Story {
-    var modifiedAtDescription: String? {
-        let df = DateFormatter()
-        df.dateFormat = "yyyy년 MM월 dd일 HH시 mm분"
-        return df.string(from: modifiedAt.value)
-    }
-}

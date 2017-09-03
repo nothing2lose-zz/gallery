@@ -17,7 +17,7 @@ final class StoryListViewController: UIViewController, CameraViewControllerDeleg
     
     fileprivate lazy var textfield: UITextField = {
         let tf = UITextField()
-        tf.placeholder = "검색어를 입력해주세요."
+        tf.placeholder = "검색어를 입력해주세요. 0.3초뒤 자동검색 됩니다."
         let close = KeyboardResignAccessoryView()
         close.textfield = tf
         return tf
@@ -178,8 +178,7 @@ extension StoryListViewController: ListSectionObserver {
     
     func listMonitor(_ monitor: ListMonitor<Story>, didUpdateObject object: Story, atIndexPath indexPath: IndexPath) {
         if let cell = self.tableView.cellForRow(at: indexPath) as? StoryCell {
-            let story = Storage.stories[indexPath]
-            cell.item = story
+            cell.viewModel = StoryViewModel(Storage.stories[indexPath])
         }
     }
     
@@ -221,9 +220,7 @@ extension StoryListViewController: UITableViewDataSource, UITableViewDelegate, U
         guard let cell = tableView.dequeueReusableCell(withIdentifier: StoryCell.identifier, for: indexPath) as? StoryCell else {
             return UITableViewCell()
         }
-        let item = Storage.stories[indexPath]
-        cell.item = item
-        
+        cell.viewModel = StoryViewModel(Storage.stories[indexPath])
         return cell
     }
     
@@ -236,7 +233,7 @@ extension StoryListViewController: UITableViewDataSource, UITableViewDelegate, U
         tableView.deselectRow(at: indexPath, animated: true)
         
         let vc = StoryDetailViewController()
-        vc.story = Storage.stories[indexPath]
+        vc.viewModel = StoryViewModel(Storage.stories[indexPath])
         navigationController?.pushViewController(vc, animated: true)
     }
     

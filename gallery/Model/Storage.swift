@@ -102,27 +102,30 @@ public struct Storage {
             )
         }
     }
-        
-    static func createStory(_ title: String?, _ content: String?, _ images: [UIImage], _ thumbnailIndex: Int?, _ modifiedAt: Date? = nil, _ completionHandler: (() -> Void)? = nil) {
-        
-        var imageFileIds: [String] = []
-        
-        var imageSaveCounter = images.count
-        // store image to disk
-        for (_, v) in images.enumerated() {
-            let fileId = UUID().uuidString.lowercased()
-            imageFileIds.append(fileId)
-            
-            saveImageFile(fileId, v) { _ in
-                imageSaveCounter -= 1
-                
-                if 0 == imageSaveCounter {
-                    saveToDB()
-                }
-                
+
+    ///
+    /// NOTE: `updateStory` currently does not support `images`.
+    ///
+    static func updateStory(_ story: Story, _ title: String?, _ content: String?, _ thumbnailIndex: Int?, _ modifiedAt: Date? = nil, _ completionHandler: (() -> Void)? = nil) {
+        stack.perform(asynchronous: { (transaction) -> Void in
+            let story = transaction.edit(story)
+            if let title = title {
+                story?.title .= title
             }
+            if let content = content {
+                story?.descriptionText .= content
+            }
+            story?.modifiedAt .= Date()
+            story?.thumbnailImageIndex .= thumbnailIndex
+            
+        }) { _ in
+            completionHandler?()
         }
-        
+    }
+    
+    static func createStory(_ title: String?, _ content: String?, _ images: [UIImage], _ thumbnailIndex: Int?, _ modifiedAt: Date? = nil, _ completionHandler: (() -> Void)? = nil) {
+        var imageFileIds: [String] = []
+        var imageSaveCounter = images.count
         
         // store in db
         func saveToDB() {
@@ -160,8 +163,33 @@ public struct Storage {
                 completion: { _ in
                     completionHandler?()
             })
-
+            
         }
+
+        
+        // store image to disk
+        if imageSaveCounter > 0 {
+            
+            for (_, v) in images.enumerated() {
+                let fileId = UUID().uuidString.lowercased()
+                imageFileIds.append(fileId)
+                
+                saveImageFile(fileId, v) { _ in
+                    imageSaveCounter -= 1
+                    
+                    if 0 == imageSaveCounter {
+                        saveToDB()
+                    }
+                    
+                }
+            }
+            
+        } else {
+            saveToDB()
+        }
+        
+        
+        
     }
     
     static func deleteAllObjects(_ completionHandler: @escaping (() -> Void)) {

@@ -20,18 +20,16 @@ final class StoryDetailViewController: UIViewController {
     
     private var disposeBag = DisposeBag()
     
-    var story: Story? {
+    var viewModel: StoryViewModel? {
         didSet {
-            guard let story = story else { return }
-            let images = story.images.value
-                .filter { nil != $0.thumbnailImage }
-                .map { $0.thumbnailImage! }
-            detailView.images = images
-            detailView.selectedThumbnailIndex = story.thumbnailImageIndex.value
-            detailView.titleTextField.text = story.title.value
-            detailView.descriptionTextView.text = story.descriptionText.value
-            detailView.modifiedDateLabel.text = story.modifiedAtDescription != nil ? "\(story.modifiedAtDescription!))에 수정됨" : ""
-            detailView.photoCountLabel.text = "\(images.count)장의 사진"
+            guard let viewModel = viewModel else { return }
+            
+            detailView.images = viewModel.thumbnailImages
+            detailView.selectedThumbnailIndex = viewModel.selectedThumbnailIndex
+            detailView.titleTextField.text = viewModel.title
+            detailView.descriptionTextView.text = viewModel.content
+            detailView.modifiedDateLabel.text = viewModel.modifiedDateDescriptionString
+            detailView.photoCountLabel.text = viewModel.imageCountDescriptionString
         }
     }
     
@@ -48,7 +46,7 @@ final class StoryDetailViewController: UIViewController {
     // MARK: - private
     private func save() {
         
-        guard let storyItem = story else { return }
+        guard let viewModel = viewModel else { return }
         
         let dv = detailView
         let title = dv.titleTextField.text
@@ -56,21 +54,25 @@ final class StoryDetailViewController: UIViewController {
         let selectedThumbnailIndex = dv.selectedThumbnailIndex
 
         // TODO: support delete images.
-        Storage.stack.perform(asynchronous: { (transaction) -> Void in
-            let story = transaction.edit(storyItem)
-            if let title = title {
-                story?.title .= title
-            }
-            if let content = content {
-                story?.descriptionText .= content
-            }
-            story?.modifiedAt .= Date()
-            story?.thumbnailImageIndex .= selectedThumbnailIndex
-
-        }) { _ in
+        
+        Storage.updateStory(viewModel.model(), title, content, selectedThumbnailIndex) {
 //            Storage.refetch()
             self.navigationController?.popViewController(animated: true)
         }
+        
+//        Storage.stack.perform(asynchronous: { (transaction) -> Void in
+//            let story = transaction.edit(storyItem)
+//            if let title = title {
+//                story?.title .= title
+//            }
+//            if let content = content {
+//                story?.descriptionText .= content
+//            }
+//            story?.modifiedAt .= Date()
+//            story?.thumbnailImageIndex .= selectedThumbnailIndex
+//
+//        }) { _ in
+//        }
         
     }
     
@@ -114,8 +116,6 @@ final class StoryDetailViewController: UIViewController {
 extension StoryDetailViewController: ImagePresentableProtocol {
     
     var images: [UIImage]? {
-        return story?.images.value
-            .filter { nil != $0.image }
-            .map { $0.image! }
+        return viewModel?.originalImages
     }
 }

@@ -31,7 +31,7 @@ final class StoryCell: UITableViewCell {
         return lb
     }()
     
-    var item: Story? {
+    var viewModel: StoryViewModel? {
         didSet {
             bindData()
         }
@@ -55,16 +55,11 @@ final class StoryCell: UITableViewCell {
     
     // MARK: - private
     private func bindData() {
-        guard let item = item else { return }
+        guard let viewModel = viewModel else { return }
         
-        titleLabel.text = item.title.value
-        descriptionLabel.text = item.modifiedAtDescription // item.descriptionText.value
-        
-        if let thumbnailImageIndex = item.thumbnailImageIndex.value {
-            self.thumbnailImageView.image = item.images[thumbnailImageIndex].thumbnailImage
-        } else {
-            self.thumbnailImageView.image = nil
-        }
+        titleLabel.text = viewModel.title
+        descriptionLabel.text = viewModel.modifiedDateString
+        thumbnailImageView.image = viewModel.thumbnailImage
     }
     
     

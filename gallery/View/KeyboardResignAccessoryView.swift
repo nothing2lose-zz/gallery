@@ -8,7 +8,7 @@
 
 import UIKit
 
-class KeyboardResignAccessoryView: UIToolbar {
+final class KeyboardResignAccessoryView: UIToolbar {
     
     weak var textfield: UITextField? {
         didSet {
