@@ -41,7 +41,7 @@ public struct Storage {
             switch self {
             case .all: return Where(true)
             case .query(let query):
-                let predicate = NSPredicate(format: "title CONTAINS[cd] %@", query)
+                let predicate = NSPredicate(format: "(title CONTAINS[cd] %@) OR (descriptionText CONTAINS[cd] %@)", query, query)
                 return Where(predicate)
             }
         }
@@ -232,7 +232,7 @@ public struct Storage {
     
     // image cache util
     
-    // TODO: refactor & delete method should be implemented.
+    // TODO: refactor
     private static func deleteImageFile(_ fileId: String, _ completionHandler: @escaping (() -> Void)) {
         DispatchQueue.global(qos: .background).async {
             var counter = 0

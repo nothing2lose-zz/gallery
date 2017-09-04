@@ -59,21 +59,6 @@ final class StoryDetailViewController: UIViewController {
 //            Storage.refetch()
             self.navigationController?.popViewController(animated: true)
         }
-        
-//        Storage.stack.perform(asynchronous: { (transaction) -> Void in
-//            let story = transaction.edit(storyItem)
-//            if let title = title {
-//                story?.title .= title
-//            }
-//            if let content = content {
-//                story?.descriptionText .= content
-//            }
-//            story?.modifiedAt .= Date()
-//            story?.thumbnailImageIndex .= selectedThumbnailIndex
-//
-//        }) { _ in
-//        }
-        
     }
     
     private func setup() {
